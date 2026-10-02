@@ -1,53 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CGEx — Central de Logs</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CGEx | Central</title>
+
+  <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
-<header>
-  <div class="logo">CG<span>Ex</span></div>
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#logs">Logs</a>
-    <a href="#avaliacoes">Avaliações</a>
-    <a href="#transcripts">Transcripts</a>
-  </nav>
-</header>
 
-<main>
-<section id="inicio" class="hero">
-  <p class="tag">CORREGEDORIA-GERAL DO EXÉRCITO</p>
-  <h1>Central de <span>Logs</span></h1>
-  <p class="desc">Acompanhe os registros, avaliações e transcripts do CGEx em um só lugar.</p>
-  <a class="button" href="#logs">Ver logs</a>
-</section>
+  <header>
+    <div class="logo">CGEx</div>
 
-<section class="cards">
-  <div class="card"><small>LOGS</small><strong id="logCount">0</strong><p>Registros</p></div>
-  <div class="card"><small>AVALIAÇÕES</small><strong id="reviewCount">0</strong><p>Recebidas</p></div>
-  <div class="card"><small>STATUS</small><strong class="online">ONLINE</strong><p>Central ativa</p></div>
-</section>
+    <nav>
+      <a href="/">Início</a>
+      <a href="#logs">Logs</a>
+      <a href="#avaliacoes">Avaliações</a>
+      <a href="#transcripts">Transcripts</a>
+    </nav>
+  </header>
 
-<section id="logs">
-  <h2>📋 Logs</h2>
-  <div id="logsList" class="panel">Nenhum log registrado.</div>
-</section>
+  <main>
 
-<section id="avaliacoes">
-  <h2>⭐ Avaliações</h2>
-  <div id="reviewsList" class="panel">Nenhuma avaliação registrada.</div>
-</section>
+    <section class="hero">
+      <span class="status">● SISTEMA ONLINE</span>
 
-<section id="transcripts">
-  <h2>📄 Transcripts</h2>
-  <div id="transcriptsList" class="panel">Nenhum transcript registrado.</div>
-</section>
-</main>
+      <h1>Central de Logs</h1>
 
-<footer>CGEx • Central Administrativa</footer>
-<script src="script.js"></script>
+      <p>
+        Central oficial para consulta de logs,
+        avaliações e transcripts da Corregedoria-Geral do Exército.
+      </p>
+
+      <a class="button" href="#logs">
+        Ver Logs
+      </a>
+    </section>
+
+    <section class="cards">
+
+      <div class="card">
+        <h2 id="logCount">0</h2>
+        <p>Logs</p>
+      </div>
+
+      <div class="card">
+        <h2 id="reviewCount">0</h2>
+        <p>Avaliações</p>
+      </div>
+
+      <div class="card">
+        <h2>ONLINE</h2>
+        <p>Status</p>
+      </div>
+
+    </section>
+
+    <section id="logs" class="section">
+      <h2>📋 Logs</h2>
+      <div id="logsList" class="list">
+        Nenhum log registrado.
+      </div>
+    </section>
+
+    <section id="avaliacoes" class="section">
+      <h2>⭐ Avaliações</h2>
+      <div id="reviewsList" class="list">
+        Nenhuma avaliação registrada.
+      </div>
+    </section>
+
+    <section id="transcripts" class="section">
+      <h2>📄 Transcripts</h2>
+      <div id="transcriptsList" class="list">
+        Nenhum transcript registrado.
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    CGEx • Corregedoria-Geral do Exército
+  </footer>
+
+  <script src="/script.js"></script>
+
 </body>
 </html>
