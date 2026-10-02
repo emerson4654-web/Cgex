@@ -76,7 +76,10 @@ if (!CONFIG.publicUrl) {
 // PASTAS
 // ==================================================
 
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = path.join(
+  __dirname,
+  'data'
+);
 
 const TRANSCRIPT_DIR = path.join(
   __dirname,
@@ -88,13 +91,19 @@ const DB_FILE = path.join(
   'tickets.json'
 );
 
-fs.mkdirSync(DATA_DIR, {
-  recursive: true
-});
+fs.mkdirSync(
+  DATA_DIR,
+  {
+    recursive: true
+  }
+);
 
-fs.mkdirSync(TRANSCRIPT_DIR, {
-  recursive: true
-});
+fs.mkdirSync(
+  TRANSCRIPT_DIR,
+  {
+    recursive: true
+  }
+);
 
 
 // ==================================================
@@ -104,14 +113,22 @@ fs.mkdirSync(TRANSCRIPT_DIR, {
 let db = {};
 
 try {
-  if (fs.existsSync(DB_FILE)) {
+
+  if (
+    fs.existsSync(
+      DB_FILE
+    )
+  ) {
+
     db = JSON.parse(
       fs.readFileSync(
         DB_FILE,
         'utf8'
       )
     );
+
   }
+
 } catch (error) {
 
   console.error(
@@ -120,6 +137,7 @@ try {
   );
 
   db = {};
+
 }
 
 
@@ -133,6 +151,7 @@ function saveDb() {
       2
     )
   );
+
 }
 
 
@@ -245,7 +264,9 @@ function publicTranscriptUrl(
 
 function esc(value) {
 
-  return String(value ?? '')
+  return String(
+    value ?? ''
+  )
 
     .replaceAll(
       '&',
@@ -271,6 +292,7 @@ function esc(value) {
       "'",
       '&#039;'
     );
+
 }
 
 
@@ -280,18 +302,20 @@ function esc(value) {
 
 function linkify(text) {
 
-  const escaped = esc(text);
+  const escaped =
+    esc(text);
 
   return escaped.replace(
     /(https?:\/\/[^\s<]+)/g,
 
     '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
   );
+
 }
 
 
 // ==================================================
-// BUSCAR TODAS AS MENSAGENS
+// BUSCAR MENSAGENS
 // ==================================================
 
 async function fetchAllMessages(
@@ -309,7 +333,10 @@ async function fetchAllMessages(
     };
 
     if (before) {
-      options.before = before;
+
+      options.before =
+        before;
+
     }
 
     const batch =
@@ -328,17 +355,21 @@ async function fetchAllMessages(
     before =
       batch.last().id;
 
-    if (batch.size < 100) {
+    if (
+      batch.size < 100
+    ) {
       break;
     }
+
   }
 
   return all.reverse();
+
 }
 
 
 // ==================================================
-// MENSAGEM DO TRANSCRIPT
+// MENSAGEM HTML
 // ==================================================
 
 function messageHtml(
@@ -352,7 +383,10 @@ function messageHtml(
 
 
   const attachments =
-    [...message.attachments.values()]
+    [
+      ...message.attachments.values()
+    ]
+
       .map(
         attachment => {
 
@@ -362,6 +396,7 @@ function messageHtml(
             );
 
           return `
+
           <div class="attachment">
 
             ${
@@ -373,7 +408,9 @@ function messageHtml(
             }
 
             <a
-              href="${esc(attachment.url)}"
+              href="${esc(
+                attachment.url
+              )}"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -384,14 +421,18 @@ function messageHtml(
             </a>
 
           </div>
+
           `;
+
         }
       )
+
       .join('');
 
 
   const embeds =
     message.embeds
+
       .map(
         embed => {
 
@@ -419,6 +460,7 @@ function messageHtml(
               : '';
 
           return `
+
           <div class="embed">
 
             ${title}
@@ -428,9 +470,12 @@ function messageHtml(
             ${url}
 
           </div>
+
           `;
+
         }
       )
+
       .join('');
 
 
@@ -493,6 +538,7 @@ function messageHtml(
   </article>
 
   `;
+
 }
 
 
@@ -530,7 +576,9 @@ async function generateTranscript(
 
   const rows =
     messages
-      .map(messageHtml)
+      .map(
+        messageHtml
+      )
       .join('\n');
 
 
@@ -802,7 +850,9 @@ Transcript gerado pelo bot de tickets.
 
     count:
       messages.length
+
   };
+
 }
 
 
@@ -819,6 +869,7 @@ function isAttendant(
       CONFIG.attendantRoleId
     )
   );
+
 }
 
 
@@ -830,7 +881,11 @@ function ticketRecord(
   channelId
 ) {
 
-  return db[channelId] || null;
+  return (
+    db[channelId] ||
+    null
+  );
+
 }
 
 
@@ -881,18 +936,26 @@ function safeChannelName(
 
 
   return `ticket-${normalized}-${username}`;
+
 }
 
 
 // ==================================================
-// PAINEL PRINCIPAL
+// PAINEL EM EMBED
 // ==================================================
 
 function ticketPanel() {
 
-  const texto = `
+  const embed =
+    new EmbedBuilder()
 
-<:corregedoriacgex:1548227255388344340>  **CGEx — Corregedoria-Geral do Exército** <:corregedoriacgex:1548227255388344340>
+      .setColor(
+        0x00ff7f
+      )
+
+      .setDescription(`
+
+<:corregedoriacgex:1548227255388344340> **CGEx — Corregedoria-Geral do Exército** <:corregedoriacgex:1548227255388344340>
 
 Escolha uma das opções abaixo para abrir seu ticket.
 
@@ -926,7 +989,7 @@ Aguarde a avaliação da Corregedoria-Geral do Exército.
 
 Utilize esta opção para solicitar a abertura de um processo, Juntamente com o STM.
 
-`;
+`);
 
 
   const row =
@@ -934,23 +997,30 @@ Utilize esta opção para solicitar a abertura de um processo, Juntamente com o 
       .addComponents(
 
         new ButtonBuilder()
+
           .setCustomId(
             'abrir_revogacoes'
           )
+
           .setLabel(
             '🔄 Revogações'
           )
+
           .setStyle(
             ButtonStyle.Primary
           ),
 
+
         new ButtonBuilder()
+
           .setCustomId(
             'abrir_processo'
           )
+
           .setLabel(
             '📋 Solicitar Processo'
           )
+
           .setStyle(
             ButtonStyle.Success
           )
@@ -960,18 +1030,21 @@ Utilize esta opção para solicitar a abertura de um processo, Juntamente com o 
 
   return {
 
-    content: texto,
+    embeds: [
+      embed
+    ],
 
     components: [
       row
     ]
 
   };
+
 }
 
 
 // ==================================================
-// FORMULÁRIO
+// MODAL DO TICKET
 // ==================================================
 
 function ticketModal(
@@ -986,9 +1059,11 @@ function ticketModal(
       )
 
       .setTitle(
+
         tipo === 'Revogações'
           ? '🔄 Revogações'
           : '📋 Solicitar Processo'
+
       );
 
 
@@ -1072,6 +1147,7 @@ function ticketModal(
 
 
   return modal;
+
 }
 
 
@@ -1114,6 +1190,7 @@ function ticketButtons() {
         )
 
     );
+
 }
 
 
@@ -1126,16 +1203,20 @@ async function registerPanelCommand() {
   const commands = [
 
     {
-      name: 'painel',
+      name:
+        'painel',
 
       description:
         'Envia o painel de tickets'
+
     }
 
   ];
 
 
-  if (CONFIG.guildId) {
+  if (
+    CONFIG.guildId
+  ) {
 
     const guild =
       await client.guilds.fetch(
@@ -1153,6 +1234,7 @@ async function registerPanelCommand() {
     );
 
   }
+
 }
 
 
@@ -1206,8 +1288,12 @@ client.on(
       // ==========================================
 
       if (
+
         interaction.isChatInputCommand() &&
-        interaction.commandName === 'painel'
+
+        interaction.commandName ===
+          'painel'
+
       ) {
 
         if (
@@ -1250,9 +1336,12 @@ client.on(
       // ==========================================
 
       if (
+
         interaction.isButton() &&
+
         interaction.customId ===
           'abrir_revogacoes'
+
       ) {
 
         return interaction.showModal(
@@ -1269,9 +1358,12 @@ client.on(
       // ==========================================
 
       if (
+
         interaction.isButton() &&
+
         interaction.customId ===
           'abrir_processo'
+
       ) {
 
         return interaction.showModal(
@@ -1284,14 +1376,17 @@ client.on(
 
 
       // ==========================================
-      // FORMULÁRIO DO TICKET
+      // FORMULÁRIO
       // ==========================================
 
       if (
+
         interaction.isModalSubmit() &&
+
         interaction.customId.startsWith(
           'ticket_form:'
         )
+
       ) {
 
         await interaction.deferReply({
@@ -1300,7 +1395,8 @@ client.on(
 
 
         const tipo =
-          interaction.customId.split(':')[1];
+          interaction.customId
+            .split(':')[1];
 
 
         const nick =
@@ -1320,17 +1416,19 @@ client.on(
 
 
         const existing =
-          Object.values(db).find(
-            ticket =>
-              ticket.guildId ===
-                interaction.guildId &&
+          Object.values(db)
+            .find(
+              ticket =>
 
-              ticket.ownerId ===
-                interaction.user.id &&
+                ticket.guildId ===
+                  interaction.guildId &&
 
-              ticket.status ===
-                'open'
-          );
+                ticket.ownerId ===
+                  interaction.user.id &&
+
+                ticket.status ===
+                  'open'
+            );
 
 
         if (existing) {
@@ -1428,7 +1526,7 @@ client.on(
 
 
         // ========================================
-        // SALVAR TICKET
+        // SALVAR
         // ========================================
 
         db[channel.id] = {
@@ -1543,9 +1641,12 @@ Aguarde um atendente assumir o ticket.
       // ==========================================
 
       if (
+
         interaction.isButton() &&
+
         interaction.customId ===
           'resgatar_ticket'
+
       ) {
 
         if (
@@ -1646,13 +1747,16 @@ Este ticket foi assumido por este atendente.
 
 
       // ==========================================
-      // FECHAR TICKET
+      // FECHAR
       // ==========================================
 
       if (
+
         interaction.isButton() &&
+
         interaction.customId ===
           'fechar_ticket'
+
       ) {
 
         const ticket =
@@ -1728,7 +1832,7 @@ Este ticket foi assumido por este atendente.
 
 
         // ========================================
-        // TRANSCRIPT
+        // GERAR TRANSCRIPT
         // ========================================
 
         const result =
@@ -1754,7 +1858,7 @@ Este ticket foi assumido por este atendente.
 
 
         // ========================================
-        // CANAL DE LOG
+        // LOG
         // ========================================
 
         const logChannel =
@@ -1843,7 +1947,7 @@ Este ticket foi assumido por este atendente.
               )
 
               .setDescription(
-                `🔗 Transcript gerado com sucesso.`
+                '📄 O transcript deste ticket foi gerado com sucesso.'
               )
 
               .setTimestamp();
@@ -1886,7 +1990,7 @@ Este ticket foi assumido por este atendente.
 
 
         // ========================================
-        // DM PARA O DONO
+        // DM DE AVALIAÇÃO
         // ========================================
 
         const owner =
@@ -1965,10 +2069,6 @@ Clique no botão abaixo para avaliar.`
         }
 
 
-        // ========================================
-        // AVISO ANTES DE APAGAR
-        // ========================================
-
         await interaction.editReply({
 
           content:
@@ -2002,11 +2102,8 @@ Clique no botão abaixo para avaliar.`
                 () => {}
               );
 
-            // IMPORTANTE:
-            // NÃO apagar o registro do DB.
-            //
-            // A avaliação ainda precisa dos dados
-            // do ticket depois que o canal for apagado.
+            // Não removemos o ticket do banco.
+            // A avaliação ainda precisa dos dados.
 
             saveDb();
 
@@ -2021,7 +2118,7 @@ Clique no botão abaixo para avaliar.`
 
 
       // ==========================================
-      // BOTÃO DE AVALIAÇÃO
+      // BOTÃO AVALIAÇÃO
       // ==========================================
 
       if (
@@ -2258,10 +2355,6 @@ Clique no botão abaixo para avaliar.`
         }
 
 
-        // ========================================
-        // NOTA
-        // ========================================
-
         const notaRaw =
           interaction.fields
             .getTextInputValue(
@@ -2298,10 +2391,6 @@ Clique no botão abaixo para avaliar.`
         }
 
 
-        // ========================================
-        // OBSERVAÇÃO
-        // ========================================
-
         const observacao =
           interaction.fields
             .getTextInputValue(
@@ -2310,10 +2399,6 @@ Clique no botão abaixo para avaliar.`
             .trim() ||
           'Sem observação.';
 
-
-        // ========================================
-        // CANAL DE AVALIAÇÃO
-        // ========================================
 
         const channel =
           await client.channels.fetch(
@@ -2338,10 +2423,6 @@ Clique no botão abaixo para avaliar.`
 
         }
 
-
-        // ========================================
-        // EMBED
-        // ========================================
 
         const embed =
           new EmbedBuilder()
@@ -2389,10 +2470,6 @@ Clique no botão abaixo para avaliar.`
 
         });
 
-
-        // ========================================
-        // MARCAR COMO AVALIADO
-        // ========================================
 
         ticket.evaluationSubmitted =
           true;
