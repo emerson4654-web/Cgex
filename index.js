@@ -6,13 +6,19 @@ const PORT = process.env.PORT || 3000;
 
 const LOG_API_KEY = process.env.LOG_API_KEY || "";
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 // ===============================
 // ARMAZENAMENTO DOS LOGS
 // ===============================
 
 const logs = [];
+
+// ===============================
+// ARMAZENAMENTO DOS TRANSCRIPTS
+// ===============================
+
+const transcripts = [];
 
 // ===============================
 // ARQUIVOS DO SITE
@@ -72,7 +78,6 @@ app.post("/api/logs", (req, res) => {
 
   logs.unshift(log);
 
-  // Limita a quantidade de logs na memória
   if (logs.length > 500) {
     logs.length = 500;
   }
@@ -86,6 +91,54 @@ app.post("/api/logs", (req, res) => {
 });
 
 // ===============================
+// API - RECEBER TRANSCRIPT DO BOT
+// ===============================
+
+app.post("/api/logs/transcripts", (req, res) => {
+  const apiKey = req.headers["x-api-key"];
+
+  if (!LOG_API_KEY) {
+    return res.status(500).json({
+      success: false,
+      error: "LOG_API_KEY não configurada no servidor."
+    });
+  }
+
+  if (apiKey !== LOG_API_KEY) {
+    return res.status(401).json({
+      success: false,
+      error: "Não autorizado."
+    });
+  }
+
+  const body = req.body || {};
+
+  const transcript = {
+    id: Date.now().toString(),
+    ...body,
+    date: body.date || new Date().toISOString()
+  };
+
+  transcripts.unshift(transcript);
+
+  if (transcripts.length > 200) {
+    transcripts.length = 200;
+  }
+
+  console.log("Novo transcript recebido:", {
+    id: transcript.id,
+    ticket: transcript.ticket || transcript.ticketId || "",
+    user: transcript.user || "",
+    date: transcript.date
+  });
+
+  return res.status(201).json({
+    success: true,
+    transcript
+  });
+});
+
+// ===============================
 // API - PEGAR LOGS
 // ===============================
 
@@ -93,6 +146,39 @@ app.get("/api/logs", (req, res) => {
   res.json({
     success: true,
     logs
+  });
+});
+
+// ===============================
+// API - PEGAR TRANSCRIPTS
+// ===============================
+
+app.get("/api/logs/transcripts", (req, res) => {
+  res.json({
+    success: true,
+    transcripts
+  });
+});
+
+// ===============================
+// API - PEGAR UM TRANSCRIPT
+// ===============================
+
+app.get("/api/logs/transcripts/:id", (req, res) => {
+  const transcript = transcripts.find(
+    item => item.id === req.params.id
+  );
+
+  if (!transcript) {
+    return res.status(404).json({
+      success: false,
+      error: "Transcript não encontrado."
+    });
+  }
+
+  res.json({
+    success: true,
+    transcript
   });
 });
 
