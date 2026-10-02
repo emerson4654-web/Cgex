@@ -6,17 +6,17 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Arquivos do site
+// Servir os arquivos do site
 app.use(express.static(__dirname));
 
-// Página principal
+// Página inicial
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Qualquer rota desconhecida volta para o site
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+// Tratamento de páginas não encontradas
+app.use((req, res) => {
+  res.status(404).send("Página não encontrada.");
 });
 
 app.listen(PORT, "0.0.0.0", () => {
