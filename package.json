@@ -1,17 +1,16 @@
 {
   "name": "eb-ticket-bot",
   "version": "1.0.0",
-  "description": "Bot de tickets com transcript HTML e link público",
-  "main": "src/index.js",
+  "description": "Bot de tickets do EB com transcript",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": ">=18.18.0"
   },
   "dependencies": {
-    "discord.js": "14.27.0",
-    "dotenv": "16.6.1",
-    "express": "5.1.0"
+    "discord.js": "^14.27.0",
+    "express": "^5.1.0"
   }
 }
