@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGEx — Central de Logs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="logo">CG<span>Ex</span></div>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#logs">Logs</a>
+    <a href="#avaliacoes">Avaliações</a>
+    <a href="#transcripts">Transcripts</a>
+  </nav>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <p class="tag">CORREGEDORIA-GERAL DO EXÉRCITO</p>
+  <h1>Central de <span>Logs</span></h1>
+  <p class="desc">Acompanhe os registros, avaliações e transcripts do CGEx em um só lugar.</p>
+  <a class="button" href="#logs">Ver logs</a>
+</section>
+
+<section class="cards">
+  <div class="card"><small>LOGS</small><strong id="logCount">0</strong><p>Registros</p></div>
+  <div class="card"><small>AVALIAÇÕES</small><strong id="reviewCount">0</strong><p>Recebidas</p></div>
+  <div class="card"><small>STATUS</small><strong class="online">ONLINE</strong><p>Central ativa</p></div>
+</section>
+
+<section id="logs">
+  <h2>📋 Logs</h2>
+  <div id="logsList" class="panel">Nenhum log registrado.</div>
+</section>
+
+<section id="avaliacoes">
+  <h2>⭐ Avaliações</h2>
+  <div id="reviewsList" class="panel">Nenhuma avaliação registrada.</div>
+</section>
+
+<section id="transcripts">
+  <h2>📄 Transcripts</h2>
+  <div id="transcriptsList" class="panel">Nenhum transcript registrado.</div>
+</section>
+</main>
+
+<footer>CGEx • Central Administrativa</footer>
+<script src="script.js"></script>
+</body>
+</html>

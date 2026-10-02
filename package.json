@@ -1,0 +1,12 @@
+{
+  "name": "cgex-site",
+  "version": "1.0.0",
+  "description": "Site simples do CGEx",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
