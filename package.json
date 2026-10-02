@@ -1,7 +1,7 @@
 {
   "name": "cgex-site",
   "version": "1.0.0",
-  "description": "Site simples do CGEx",
+  "description": "Site CGEx",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
