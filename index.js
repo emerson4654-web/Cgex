@@ -38,13 +38,10 @@ function verificarApiKey(req, res, next) {
   const chave =
     req.headers["x-api-key"];
 
-  if (
-    chave !== LOG_API_KEY
-  ) {
+  if (chave !== LOG_API_KEY) {
 
     return res.status(401).json({
-      error:
-        "Não autorizado."
+      error: "Não autorizado."
     });
 
   }
@@ -66,26 +63,11 @@ function escapeHTML(text) {
   }
 
   return String(text)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // ======================================================
@@ -98,6 +80,7 @@ app.post(
   (req, res) => {
 
     const dados = {
+
       id:
         Date.now().toString(),
 
@@ -105,15 +88,12 @@ app.post(
 
       receivedAt:
         new Date().toISOString()
+
     };
 
-    logs.unshift(
-      dados
-    );
+    logs.unshift(dados);
 
-    if (
-      logs.length > 1000
-    ) {
+    if (logs.length > 1000) {
       logs.pop();
     }
 
@@ -123,11 +103,12 @@ app.post(
     );
 
     res.json({
-      success:
-        true,
+
+      success: true,
 
       id:
         dados.id
+
     });
 
   }
@@ -201,9 +182,7 @@ app.post(
         "Ticket",
 
       messages:
-        Array.isArray(
-          dados.messages
-        )
+        Array.isArray(dados.messages)
           ? dados.messages
           : [],
 
@@ -217,9 +196,7 @@ app.post(
       transcript
     );
 
-    if (
-      transcripts.length > 500
-    ) {
+    if (transcripts.length > 500) {
       transcripts.pop();
     }
 
@@ -251,9 +228,7 @@ app.get(
   "/api/logs",
   (req, res) => {
 
-    res.json(
-      logs
-    );
+    res.json(logs);
 
   }
 );
@@ -266,9 +241,7 @@ app.get(
   "/api/logs/transcripts",
   (req, res) => {
 
-    res.json(
-      transcripts
-    );
+    res.json(transcripts);
 
   }
 );
@@ -297,9 +270,7 @@ app.get(
 
     }
 
-    res.json(
-      transcript
-    );
+    res.json(transcript);
 
   }
 );
@@ -346,10 +317,13 @@ app.get(
 
 html,
 body {
+
   margin: 0;
   padding: 0;
+
   width: 100%;
   min-height: 100%;
+
 }
 
 body {
@@ -422,28 +396,21 @@ O transcript pode ter expirado ou não existe.
 </html>
 
       `);
+
     }
 
     // ==================================================
-    // AVATAR
+    // FOTO DO USUÁRIO
     // ==================================================
 
     let avatar =
       transcript.avatar;
 
-    if (
-      !avatar &&
-      transcript.userId
-    ) {
-
-      avatar =
-        `https://cdn.discordapp.com/avatars/${transcript.userId}/`;
-    }
-
     if (!avatar) {
 
       avatar =
         "https://cdn.discordapp.com/embed/avatars/0.png";
+
     }
 
     // ==================================================
@@ -473,18 +440,13 @@ O transcript pode ter expirado ou não existe.
                 ""
               );
 
-            const autorId =
-              mensagem.authorId ||
-              "";
+            // ------------------------------------------------
+            // FOTO DA MENSAGEM
+            // ------------------------------------------------
 
             let fotoMensagem =
+              mensagem.avatar ||
               "https://cdn.discordapp.com/embed/avatars/0.png";
-
-            if (autorId) {
-
-              fotoMensagem =
-                `https://cdn.discordapp.com/avatars/${autorId}/`;
-            }
 
             return `
 
@@ -495,8 +457,11 @@ O transcript pode ter expirado ou não existe.
 
   <img
     class="message-avatar"
-    src="${fotoMensagem}"
-    onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"
+    src="${escapeHTML(fotoMensagem)}"
+    onerror="
+      this.src='https://cdn.discordapp.com/embed/avatars/0.png'
+    "
+    alt="Avatar"
   >
 
   <div class="message-content">
@@ -514,10 +479,12 @@ O transcript pode ter expirado ou não existe.
     </div>
 
     <div class="message-text">
+
       ${
         conteudo ||
         "<span class='empty'>Mensagem sem texto</span>"
       }
+
     </div>
 
   </div>
@@ -538,9 +505,7 @@ O transcript pode ter expirado ou não existe.
 
 <!DOCTYPE html>
 
-<html
-  lang="pt-BR"
->
+<html lang="pt-BR">
 
 <head>
 
@@ -617,7 +582,7 @@ body {
 }
 
 /* =====================================================
-   FUNDO
+   FUNDO DOURADO
 ===================================================== */
 
 body::before {
@@ -646,7 +611,7 @@ body::before {
 }
 
 /* =====================================================
-   TELA DE ENTRADA
+   INTRO
 ===================================================== */
 
 #intro {
@@ -687,7 +652,9 @@ body::before {
 
 }
 
-/* brilho */
+/* =====================================================
+   BRILHO DO INTRO
+===================================================== */
 
 #intro::before {
 
@@ -718,7 +685,7 @@ body::before {
 }
 
 /* =====================================================
-   LOGO
+   LOGO CGEx
 ===================================================== */
 
 .intro-logo {
@@ -730,16 +697,19 @@ body::before {
     2;
 
   width:
-    110px;
+    160px;
 
   height:
-    110px;
+    160px;
 
   border:
     2px solid #d4af37;
 
   border-radius:
     50%;
+
+  overflow:
+    hidden;
 
   display:
     flex;
@@ -750,28 +720,35 @@ body::before {
   justify-content:
     center;
 
-  color:
-    #d4af37;
-
-  font-size:
-    30px;
-
-  font-weight:
-    900;
-
-  letter-spacing:
-    2px;
+  background:
+    #21090d;
 
   box-shadow:
 
-    0 0 20px
-      rgba(212,175,55,0.25),
+    0 0 25px
+      rgba(212,175,55,0.35),
 
-    inset 0 0 20px
-      rgba(212,175,55,0.08);
+    0 0 60px
+      rgba(212,175,55,0.12);
 
   animation:
     logoIn 1s ease forwards;
+
+}
+
+.intro-logo img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+
+  display:
+    block;
 
 }
 
@@ -801,6 +778,9 @@ body::before {
 
   letter-spacing:
     4px;
+
+  text-align:
+    center;
 
   opacity:
     0;
@@ -990,7 +970,7 @@ body::before {
 }
 
 /* =====================================================
-   CONTEÚDO
+   SITE
 ===================================================== */
 
 #site {
@@ -1070,7 +1050,7 @@ body::before {
 }
 
 /* =====================================================
-   FOTO USUÁRIO
+   FOTO DO USUÁRIO
 ===================================================== */
 
 .user-avatar {
@@ -1091,6 +1071,7 @@ body::before {
     2px solid #d4af37;
 
   box-shadow:
+
     0 0 25px
     rgba(212,175,55,0.22);
 
@@ -1161,7 +1142,7 @@ body::before {
 }
 
 /* =====================================================
-   PRINCIPAL
+   CONTAINER
 ===================================================== */
 
 .container {
@@ -1202,6 +1183,7 @@ body::before {
     25px;
 
   box-shadow:
+
     0 20px 70px
     rgba(0,0,0,0.45);
 
@@ -1235,7 +1217,7 @@ body::before {
 }
 
 /* =====================================================
-   INFORMAÇÕES
+   TITULO DO TICKET
 ===================================================== */
 
 .ticket-title {
@@ -1253,6 +1235,10 @@ body::before {
     0 0 20px;
 
 }
+
+/* =====================================================
+   INFORMAÇÕES
+===================================================== */
 
 .info-grid {
 
@@ -1319,7 +1305,7 @@ body::before {
 }
 
 /* =====================================================
-   SEPARADOR
+   SEÇÃO
 ===================================================== */
 
 .section-title {
@@ -1356,6 +1342,7 @@ body::before {
     1px;
 
   background:
+
     linear-gradient(
       90deg,
       #d4af37,
@@ -1553,9 +1540,17 @@ body::before {
    MOBILE
 ===================================================== */
 
-@media (
-  max-width: 650px
-) {
+@media (max-width: 650px) {
+
+  .intro-logo {
+
+    width:
+      125px;
+
+    height:
+      125px;
+
+  }
 
   .intro-title {
 
@@ -1564,6 +1559,9 @@ body::before {
 
     letter-spacing:
       2px;
+
+    padding:
+      0 20px;
 
   }
 
@@ -1669,13 +1667,21 @@ body::before {
 <body>
 
 <!-- =================================================
-     TELA DE ENTRADA
+     ANIMAÇÃO DE ENTRADA
 ================================================= -->
 
 <div id="intro">
 
   <div class="intro-logo">
-    CG
+
+    <img
+      src="/cgex-logo.jpg"
+      alt="CGEx"
+      onerror="
+        this.style.display='none';
+      "
+    >
+
   </div>
 
   <div class="intro-title">
@@ -1702,8 +1708,10 @@ body::before {
 
       <img
         class="user-avatar"
-        src="${avatar}"
-        onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"
+        src="${escapeHTML(avatar)}"
+        onerror="
+          this.src='https://cdn.discordapp.com/embed/avatars/0.png'
+        "
         alt="Foto do usuário"
       >
 
@@ -1833,13 +1841,18 @@ body::before {
 
         ${
           mensagensHTML ||
+
           `
           <div class="message">
+
             <div class="message-content">
+
               <div class="message-text">
                 Nenhuma mensagem encontrada.
               </div>
+
             </div>
+
           </div>
           `
         }
@@ -1934,7 +1947,7 @@ app.use(
 );
 
 // ======================================================
-// INICIAR
+// INICIAR SERVIDOR
 // ======================================================
 
 app.listen(
